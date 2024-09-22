@@ -35,6 +35,7 @@ jobs:
         if: ${{ steps.btcd-latest-release.outputs.release != steps.current-release.outputs.release }}
         env:
           BTCD_NEW_RELEASE_AVAILABLE: ${{ steps.btcd-latest-release.outputs.release != steps.current-release.outputs.release }}
+        run: echo "BTCD New Version Available - ${{ steps.btcd-latest-release.outputs.release }}"
           
       - name: Checkout the repo
         if: ${{ env.BTCD_NEW_RELEASE_AVAILABLE }}
