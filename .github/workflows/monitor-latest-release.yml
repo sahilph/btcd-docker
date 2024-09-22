@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  monitor-new-release:
 
     runs-on: ubuntu-latest
     permissions:
@@ -39,15 +39,15 @@ jobs:
         run: echo "BTCD New Version Available - ${{ steps.btcd-latest-release.outputs.release }}"
           
       - name: Checkout the repo
-        if: ${{ env.BTCD_NEW_RELEASE_AVAILABLE }}
+        if: ${{ env.BTCD_NEW_RELEASE_AVAILABLE == true }}
         uses: actions/checkout@v4
 
       - name: Modify Dockerfile
-        if: ${{ env.BTCD_NEW_RELEASE_AVAILABLE }}
+        if: ${{ env.BTCD_NEW_RELEASE_AVAILABLE == true }}
         run: sed -i 's|https://github.com/btcsuite/btcd.git#${{ steps.current-release.outputs.release }}|https://github.com/btcsuite/btcd.git#${{ steps.btcd-latest-release.outputs.release }}|g'
 
       - name: Create Pull Request
-        if: ${{ env.BTCD_NEW_RELEASE_AVAILABLE }}
+        if: ${{ env.BTCD_NEW_RELEASE_AVAILABLE == true }}
         uses: peter-evans/create-pull-request@v7
         with:
           sign-commits: true
