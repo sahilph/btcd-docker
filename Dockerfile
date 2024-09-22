@@ -12,7 +12,7 @@
 # sha256:c80567372be0d486766593cc722d3401038e2f150a0f6c5c719caa63afb4026a
 FROM golang@sha256:c80567372be0d486766593cc722d3401038e2f150a0f6c5c719caa63afb4026a AS build-container
 
-ADD https://github.com/btcsuite/btcd.git#v0.24.2 /app
+ADD https://github.com/btcsuite/btcd.git#v0.24.0 /app
 WORKDIR /app
 RUN set -ex \
   && echo "Compiling btcd" \
