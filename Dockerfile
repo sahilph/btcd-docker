@@ -26,4 +26,7 @@ VOLUME ["/btcd"]
 
 EXPOSE 8333 8334
 
-ENTRYPOINT ["docker-entrypoint.sh"]
+COPY docker-entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+
+CMD ["btcd"]
