@@ -52,5 +52,9 @@ jobs:
           branch: new-release-${{ steps.btcd-latest-release.outputs.release }}
           branch-suffix: random
           title: BTCD new release ${{ steps.btcd-latest-release.outputs.release }}
-          draft: true
+          draft: false
+          assignees: sahilph
+          reviewers: sahilph
+          labels: automated pr
+          
           
