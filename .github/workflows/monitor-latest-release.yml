@@ -42,7 +42,7 @@ jobs:
 
       - name: Modify Dockerfile
         if: ${{ steps.btcd-latest-release.outputs.release != steps.current-release.outputs.release }}
-        run: sed -i 's|https://github.com/btcsuite/btcd.git#${{ steps.current-release.outputs.release }}|https://github.com/btcsuite/btcd.git#${{ steps.btcd-latest-release.outputs.release }}|g'
+        run: sed -i 's|https://github.com/btcsuite/btcd.git#${{ steps.current-release.outputs.release }}|https://github.com/btcsuite/btcd.git#${{ steps.btcd-latest-release.outputs.release }}|g' Dockerfile
 
       - name: Create Pull Request
         if: ${{ steps.btcd-latest-release.outputs.release != steps.current-release.outputs.release }}
