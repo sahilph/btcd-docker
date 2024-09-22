@@ -22,7 +22,7 @@ FROM alpine:3.16@sha256:452e7292acee0ee16c332324d7de05fa2c99f9994ecc9f0779c60291
 
 COPY --from=build-container /go/bin /bin
 
-VOLUME ["/data"]
+VOLUME ["/btcd"]
 
 EXPOSE 8333 8334
 
