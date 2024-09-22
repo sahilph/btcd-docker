@@ -1,0 +1,56 @@
+on:
+  schedule:
+    - cron: '30 5 * * 1,3'
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+      
+    steps:
+      
+      - id: btcd-latest-release
+        name: Get Latest Release for btcd
+        uses: pozetroninc/github-action-get-latest-release@v0.8.0
+        with:         
+          # The repository name in full
+          repository: btcsuite/btcd
+          # Types of releases to exclude (e.g. pre-release)
+          excludes: "prerelease, draft"
+     
+      - id: current-release
+        name: Get Latest Release for btcd
+        uses: pozetroninc/github-action-get-latest-release@v0.8.0
+        with:         
+          # The repository name in full
+          repository: ${{ github.repository }}
+          # Types of releases to exclude (e.g. pre-release)
+          excludes: "prerelease, draft"
+
+      - name: Compare versions
+        if: ${{ steps.btcd-latest-release.outputs.release != steps.current-release.outputs.release }}
+        env:
+          BTCD_NEW_RELEASE_AVAILABLE: ${{ steps.btcd-latest-release.outputs.release != steps.current-release.outputs.release }}
+          
+      - name: Checkout the repo
+        if: ${{ env.BTCD_NEW_RELEASE_AVAILABLE }}
+        uses: actions/checkout@v4
+
+      - name: Modify Dockerfile
+        if: ${{ env.BTCD_NEW_RELEASE_AVAILABLE }}
+        run: sed -i 's|https://github.com/btcsuite/btcd.git#${{ steps.current-release.outputs.release }}|https://github.com/btcsuite/btcd.git#${{ steps.btcd-latest-release.outputs.release }}|g'
+
+      - name: Create Pull Request
+        if: ${{ env.BTCD_NEW_RELEASE_AVAILABLE }}
+        uses: peter-evans/create-pull-request@v7
+        with:
+          sign-commits: true
+          branch: new-release-${{ steps.btcd-latest-release.outputs.release }}
+          branch-suffix: random
+          title: BTCD new release ${{ steps.btcd-latest-release.outputs.release }}
+          draft: true
+          
