@@ -1,3 +1,4 @@
+name: Monitor for new BTCD releases
 on:
   schedule:
     - cron: '30 5 * * 1,3'
