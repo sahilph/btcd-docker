@@ -1,7 +1,9 @@
 #!/bin/sh
 
 if [ "$1" = "btcd" ] ; then
-  set -- "$@" -b "$BTCD_DIR/data" -C "$BTCD_DIR/btcd.conf" --logdir="$BTCD_DIR/logs"
+  # Manually generate certificate and add all domains, it is needed to connect to "btcd" over docker links.
+  gencerts --host="*" --directory="/.btcd" || echo "Certificate and key already exists"
+  set -- "$@" --rpccert="/.btcd/rpc.cert" --rpckey="/.btcd/rpc.key"
 fi
 
 exec "$@"
